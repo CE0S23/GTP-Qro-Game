@@ -1,0 +1,39 @@
+# --- Material local que no se publica (repo público) ---
+/tmp/
+/Archivos e Imagenes/
+
+# --- Unity (proyecto en Game/GTP Qro) ---
+/Game/GTP Qro/[Ll]ibrary/
+/Game/GTP Qro/[Tt]emp/
+/Game/GTP Qro/[Oo]bj/
+/Game/GTP Qro/[Ll]ogs/
+/Game/GTP Qro/[Uu]ser[Ss]ettings/
+/Game/GTP Qro/[Bb]uild/
+/Game/GTP Qro/[Bb]uilds/
+/Game/GTP Qro/[Mm]emoryCaptures/
+/Game/GTP Qro/[Rr]ecordings/
+/Game/GTP Qro/Assets/_Recovery/
+/Game/GTP Qro/Assets/_Recovery.meta
+.vs/
+.vscode/
+.idea/
+*.csproj
+*.sln
+*.suo
+*.user
+*.pidb
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.unitypackage
+*.apk
+*.aab
+crashlytics-build.properties
+
+# --- Obsidian (estado local del editor) ---
+/Memoria/GDD_GTP/.obsidian/workspace*.json
+
+# --- Sistema ---
+Thumbs.db
+.DS_Store
