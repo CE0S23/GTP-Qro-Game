@@ -31,6 +31,7 @@ namespace GTP
                 gm.Session.RegisterPickup();
                 gm.Session.AddBattery(gm.Config.batteryPickupAmount);
                 gm.Session.AddScore(gm.Config.pickupPoints);
+                GameEvents.PickupCollected.Raise(transform.position);
                 GameUI.Instance?.Hud.ShowToast("+" + gm.Config.batteryPickupAmount.ToString("0") + "% batería");
             }
             gameObject.SetActive(false);

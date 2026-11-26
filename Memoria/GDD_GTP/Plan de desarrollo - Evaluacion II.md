@@ -8,7 +8,7 @@ tags: [GTP, plan, rubrica, evaluacion-II]
 
 # Plan de desarrollo — Evaluación II
 
-Volver a [[Bienvenido|Memoria del Juego]] · Resultado de la Parte 1: [[Hito 02 - Beta jugable]] · Tareas de la Parte 2: [[Parte 2 - Orlando (pendientes)]]
+Volver a [[Bienvenido|Memoria del Juego]] · Resultado de la Parte 1: [[Hito 02 - Beta jugable]] · DE/AU: [[Hito 03 - Game feel, IA y optimizacion]] · Tareas de la Parte 2: [[Parte 2 - Orlando (pendientes)]]
 
 ## 1. Qué pide la rúbrica
 
@@ -21,16 +21,17 @@ Fuente: `Videojuegos - Lista de Cotejo para Evaluación II.pdf` (raíz del proye
 | SA | 1.3 Diseño de empaque (medio de almacenamiento) | Parte 2 — Orlando |
 | SA | 1.4 Reporte de pruebas: ≥ 5 errores **por cada severidad**, con descripción, pasos, información adicional, comportamiento esperado, frecuencia, severidad y prioridad | Parte 2 — Orlando |
 | SA | 1.5 Publicar en cualquier store | Parte 2 — Orlando |
-| DE | Cinemachine (Follow + Camera Shake), post-processing + partículas, Blend Trees | Opcional, después de cerrar SA |
-| AU | ScriptableObjects, NavMesh, reporte de Profiler | Opcional; la base ya avanza en SO (ver §4) |
+| DE | Cinemachine (Follow + Camera Shake), post-processing + partículas, Blend Trees | **Hito 03 — César (hecho)**; cuenta cuando SA esté al 100 % |
+| AU | ScriptableObjects, NavMesh, reporte de Profiler | **Hito 03 — César (hecho)**: canales de eventos SO, NavMesh, [[Analisis de Optimizacion (AU 4.1)]] |
 
-**Meta acordada: cumplir SA completo.** DE y AU solo si sobra tiempo, sin poner en riesgo la entrega.
+**Meta acordada: cumplir SA completo.** DE y AU solo si sobra tiempo, sin poner en riesgo la entrega. Actualización 2026-11-25: con la Parte 1 cerrada, César adelantó DE y AU en el [[Hito 03 - Game feel, IA y optimizacion]] sin tocar las tareas de Orlando. DE y AU solo se acreditan si SA queda al 100 %, así que **la Parte 2 sigue siendo lo prioritario**.
 
 ## 2. División del trabajo
 
 | Parte | Responsable | Contenido | Estado |
 | --- | --- | --- | --- |
 | **Parte 1 — Desarrollo** | César Osvaldo Ramírez Pérez | Beta jugable completo de principio a fin (7 escenas), sistemas de puntaje, intentos, batería, sigilo, decisión y dos finales; pruebas automatizadas de humo; compilación de Windows verificada; repositorio. | ✅ Terminado el 2026-11-25 |
+| **Hito 03 — DE/AU** | César Osvaldo Ramírez Pérez | Cinemachine con transiciones y sacudida, post-processing y partículas, Blend Tree, canales de eventos SO, NavMesh, análisis del Profiler, correcciones del beta, menú de compilación. | ✅ Terminado el 2026-11-25 |
 | **Parte 2 — Pruebas y entrega** | Orlando Rubio Cabrera | Jugar y cronometrar, reporte de pruebas (SA 1.4), corrección de errores encontrados, manual (SA 1.2), empaque (SA 1.3), publicación (SA 1.5). | ⏳ Pendiente — ver [[Parte 2 - Orlando (pendientes)]] |
 
 ## 3. Cómo cubre el beta el punto SA 1.1
@@ -71,3 +72,4 @@ Registrar aquí cualquier cambio de alcance: fecha, qué cambió, por qué y qui
 | Fecha | Cambio | Motivo | Quién |
 | --- | --- | --- | --- |
 | 2026-11-25 | Se implementa el recorrido completo en greybox (antes: solo movimiento) | Requisito SA 1.1 de la Evaluación II | César |
+| 2026-11-25 | Hito 03: se agregan Cinemachine 3.1.8, post-processing, partículas, Blend Tree, canales de eventos SO y NavMesh; se bajan sombras y se apaga SSAO del perfil PC | Adelantar DE/AU con la Parte 1 cerrada; la GPU integrada no llegaba a 60 FPS | César |

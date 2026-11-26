@@ -23,7 +23,9 @@ namespace GTP
         public GameSession Session { get; private set; }
         public GameState State { get; private set; } = GameState.Menu;
         public int LastStateChangeFrame { get; private set; } = -1;
-        public bool IsInvulnerable => Time.time < invulnerableUntil;
+        public bool IsInvulnerable => DebugInvulnerable || Time.time < invulnerableUntil;
+        /// <summary>Solo para la sonda de rendimiento (PerfProbe) y pruebas: el jugador no pierde intentos.</summary>
+        public bool DebugInvulnerable { get; set; }
         public bool CanPlayerAct => State == GameState.Exploracion && Time.frameCount != LastStateChangeFrame;
 
         private float invulnerableUntil;
@@ -51,6 +53,7 @@ namespace GTP
             Config = GameConfig.LoadOrDefault();
             NewSession();
             GameUI.Create(transform, Session);
+            gameObject.AddComponent<FeedbackFX>();
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
@@ -128,6 +131,8 @@ namespace GTP
             if (State != GameState.Exploracion || IsInvulnerable) return;
 
             Session.AddScore(-Config.detectionPenalty);
+            // Canal SO: efectos (sacudida de cámara, partículas, viñeta) escuchan sin conocer al GameManager.
+            GameEvents.PlayerCaught.Raise(PlayerStealth.Current != null ? PlayerStealth.Current.transform.position : Vector3.zero);
             bool hasLivesLeft = Session.LoseLife();
             if (!hasLivesLeft)
             {

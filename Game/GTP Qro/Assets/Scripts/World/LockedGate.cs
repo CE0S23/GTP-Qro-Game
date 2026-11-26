@@ -32,6 +32,7 @@ namespace GTP
                 GameManager gm = GameManager.Instance;
                 if (gm != null) gm.Session.AddScore(gm.Config.minigamePoints);
                 if (barrier != null) barrier.SetActive(false);
+                GameEvents.MinigameWon.Raise(transform.position);
                 GameUI.Instance.Hud.ShowThought("¡Abierta! Al callejón.", 2f);
                 onOpened.Invoke();
             });

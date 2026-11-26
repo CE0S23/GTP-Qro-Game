@@ -21,6 +21,7 @@ namespace GTP
             reached = true;
             respawn.SetCheckpoint(transform.position);
             RendererColor.Set(indicator, activeColor);
+            GameEvents.CheckpointReached.Raise(transform.position);
             GameUI.Instance?.Hud.ShowToast("Punto de control");
         }
     }

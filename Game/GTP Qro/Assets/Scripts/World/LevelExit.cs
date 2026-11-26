@@ -42,19 +42,44 @@ namespace GTP
             RendererColor.Set(indicator, locked ? new Color(0.7f, 0.15f, 0.15f) : new Color(0.15f, 0.9f, 0.35f));
         }
 
+        private bool playerInside;
+
         private void OnTriggerEnter(Collider other)
         {
-            if (used || other.GetComponentInParent<PlayerStealth>() == null) return;
-            if (GameManager.Instance == null || GameManager.Instance.State != GameState.Exploracion) return;
-
+            if (!IsPlayer(other) || used) return;
+            playerInside = true;
             if (locked)
             {
-                GameUI.Instance?.Hud.ShowThought(lockedThought, 2.5f);
+                if (IsPlaying()) GameUI.Instance?.Hud.ShowThought(lockedThought, 2.5f);
                 return;
             }
+            TryComplete();
+        }
 
+        private void OnTriggerExit(Collider other)
+        {
+            if (IsPlayer(other)) playerInside = false;
+        }
+
+        // Corrección (Hito 03): si la salida se desbloquea mientras el jugador ya está dentro de la zona,
+        // o el jugador entró durante un diálogo, se completa sin tener que salir y volver a entrar.
+        // (Se usa Update y no OnTriggerStay porque el Rigidbody quieto puede "dormirse" y dejar de reportarlo.)
+        private void Update()
+        {
+            if (playerInside && !used && !locked) TryComplete();
+        }
+
+        private void TryComplete()
+        {
+            if (!IsPlaying()) return;
             used = true;
+            GameEvents.LevelCompleted.Raise(transform.position);
             GameManager.Instance.CompleteLevel(nextScene);
         }
+
+        private static bool IsPlayer(Collider other) => other.GetComponentInParent<PlayerStealth>() != null;
+
+        private static bool IsPlaying() =>
+            GameManager.Instance != null && GameManager.Instance.State == GameState.Exploracion;
     }
 }

@@ -5,6 +5,7 @@ namespace GTP
     /// <summary>
     /// Perseguidor (asaltante del Barrio o policía del altercado). Se activa por cercanía o por evento,
     /// persigue al jugador y le quita un intento si lo alcanza. Se rinde por distancia o con GiveUp().
+    /// Sigue una ruta del NavMesh (<see cref="NavSteering"/>) para rodear autos y esquinas.
     /// </summary>
     [RequireComponent(typeof(Rigidbody))]
     public sealed class ChaserNPC : MonoBehaviour
@@ -19,6 +20,7 @@ namespace GTP
         [SerializeField] private bool activateOnlyByEvent;
         [SerializeField] private bool reactivateAfterRespawn;
 
+        private readonly NavSteering nav = new NavSteering();
         private Rigidbody body;
         private Vector3 home;
         private bool chasing;
@@ -26,6 +28,7 @@ namespace GTP
         private bool wasActivated;
 
         public bool IsChasing => chasing;
+        public bool IsUsingNavMesh => nav.HasNavPath;
 
         public void Configure(float moveSpeed, float activation, float leash, string caught, string thought,
                               bool onlyByEvent, bool reactivate)
@@ -70,6 +73,7 @@ namespace GTP
             body.linearVelocity = Vector3.zero;
             body.position = home;
             transform.position = home;
+            nav.Invalidate();
             chasing = !defeated && reactivateAfterRespawn && wasActivated;
         }
 
@@ -115,7 +119,8 @@ namespace GTP
                 return;
             }
 
-            Vector3 dir = toPlayer.normalized;
+            Vector3 dir = nav.DirectionTo(transform.position, player.transform.position);
+            if (dir == Vector3.zero) dir = toPlayer.normalized;
             body.linearVelocity = dir * speed;
             transform.rotation = Quaternion.LookRotation(dir);
         }
@@ -124,7 +129,14 @@ namespace GTP
         {
             Vector3 toHome = home - transform.position;
             toHome.y = 0f;
-            body.linearVelocity = toHome.magnitude > 0.2f ? toHome.normalized * speed * 0.5f : Vector3.zero;
+            if (toHome.magnitude <= 0.2f)
+            {
+                body.linearVelocity = Vector3.zero;
+                return;
+            }
+            Vector3 dir = nav.DirectionTo(transform.position, home);
+            if (dir == Vector3.zero) dir = toHome.normalized;
+            body.linearVelocity = dir * speed * 0.5f;
         }
     }
 }

@@ -2,7 +2,12 @@
     "name": "GTP.Editor",
     "rootNamespace": "GTP.EditorTools",
     "references": [
-        "GTP.Runtime"
+        "GTP.Runtime",
+        "Unity.Cinemachine",
+        "Unity.AI.Navigation",
+        "Unity.AI.Navigation.Editor",
+        "Unity.RenderPipelines.Core.Runtime",
+        "Unity.RenderPipelines.Universal.Runtime"
     ],
     "includePlatforms": [
         "Editor"

@@ -7,7 +7,9 @@ tags: [GTP, pendientes, pruebas, entrega]
 
 # Parte 2 — Pruebas y entrega (Orlando)
 
-Volver a [[Bienvenido|Memoria del Juego]] · Plan: [[Plan de desarrollo - Evaluacion II]] · Lo que ya está hecho: [[Hito 02 - Beta jugable]]
+Volver a [[Bienvenido|Memoria del Juego]] · Plan: [[Plan de desarrollo - Evaluacion II]] · Lo que ya está hecho: [[Hito 02 - Beta jugable]] y [[Hito 03 - Game feel, IA y optimizacion]]
+
+> **Novedades del Hito 03 (2026-11-25):** la primera apertura descarga Cinemachine (tarda un poco más). Ahora hay **31 pruebas automáticas** (10 EditMode + 21 PlayMode). La compilación se hace con **GTP > Compilar Windows (release)**. La sección 6 (opcional DE/AU) **ya está hecha**; lo único pendiente es la Parte 2 (SA 1.1 cronometrado, 1.2, 1.3, 1.4, 1.5), que es lo que habilita que DE y AU cuenten.
 
 Marca cada casilla al terminarla y registra los cambios en la sección 6 del plan.
 
@@ -17,7 +19,7 @@ Marca cada casilla al terminarla y registra los cambios en la sección 6 del pla
 - [ ] `git clone https://github.com/CE0S23/GTP-Qro-Game.git`
 - [ ] En Unity Hub: *Add → Add project from disk* → carpeta `Game/GTP Qro`. La primera apertura tarda (regenera `Library`).
 - [ ] Abrir `Assets/_Scenes/Escena_Menu.unity` → **Play**.
-- [ ] Correr las pruebas automáticas: *Window → General → Test Runner* → EditMode y PlayMode → *Run All* (deben salir 14/14 en verde).
+- [ ] Correr las pruebas automáticas: *Window → General → Test Runner* → EditMode y PlayMode → *Run All* (deben salir 31/31 en verde: 10 EditMode + 21 PlayMode).
 
 ## 1. Jugar y cronometrar (SA 1.1)
 
@@ -50,10 +52,12 @@ Plantilla (copiar una fila por error):
 
 Zonas donde conviene buscar errores (sin confirmar; son hipótesis para probar):
 
-- Perseguidores (asaltante, policía del altercado) que se atoran contra autos o esquinas porque van en línea recta.
+- Perseguidores y compañeros: ahora usan NavMesh (Hito 03). Probar que rodean autos y que no se quedan pegados en el portón ni en las esquinas del callejón.
+- Cámara: transición al plano cercano en diálogos, sacudida al ser detectado y viñeta roja. ¿Se ven bien? ¿Marean? ¿Tapan el HUD?
+- Partículas: ¿aparecen en el lugar correcto (batería, grafiti, punto de control, encendedor en el final del Mal)?
 - Entrar/salir de un contenedor justo cuando un policía detecta; reaparecer escondido.
 - Interactuar con E en el mismo instante en que se abre o cierra un diálogo.
-- Salida bloqueada: después de desbloquearla hay que salir y volver a entrar a la zona verde.
+- Salida bloqueada: ya se corrigió (Hito 03) que había que salir y volver a entrar; confirmar que funciona en Cuarto, Barrio y Ruta del Bien.
 - Batería en 0 % durante un diálogo o un minijuego.
 - Pausa (Esc) durante minijuego, decisión o resumen final.
 - “Reintentar nivel” desde Game Over y desde Pausa: puntaje, batería y objetos recogidos.
@@ -82,13 +86,15 @@ Al corregir un error: anotar en la columna Estado “Corregido (commit xxxxxxx)�
 
 ## 5. Compilar y publicar (SA 1.5)
 
-- [ ] *File → Build Profiles → Windows* → escenas ya están en orden (Escena_Menu primero) → *Build* en una carpeta `Builds/` (está ignorada por git).
+- [ ] Menú **GTP > Compilar Windows (release)** → genera `Game/GTP Qro/Builds/Windows/GTP QroCITY stories.exe` con las escenas en orden (la carpeta `Builds/` está ignorada por git). También sirve *File → Build Profiles → Windows → Build*.
 - [ ] Probar el `.exe` fuera del editor (la entrega se valida en la compilación, no en el editor).
 - [ ] Comprimir la carpeta del build en `.zip`.
 - [ ] Publicar en **itch.io** (gratis): crear cuenta → *Upload new project* → tipo *Downloadable* → subir el `.zip` marcado como Windows → capturas, descripción y clasificación → *Public*.
 - [ ] Guardar el enlace público en el plan y en el portafolio.
 
-## 6. Opcional (solo si SA ya está completo)
+## 6. Opcional (solo si SA ya está completo) — ✅ hecho en el Hito 03
+
+Todo lo de esta tabla ya está implementado; ver [[Hito 03 - Game feel, IA y optimizacion]] y [[Analisis de Optimizacion (AU 4.1)]]. Para el portafolio solo falta, si se quiere, abrir `perf_gtp.raw` en el Profiler del editor y tomar capturas de pantalla de la ventana (ver el análisis, §6). Tabla original como referencia:
 
 | Rúbrica | Idea concreta sobre el código actual |
 | --- | --- |
@@ -101,5 +107,5 @@ Al corregir un error: anotar en la columna Estado “Corregido (commit xxxxxxx)�
 
 ## 7. Al terminar
 
-- [ ] Actualizar [[Bienvenido|Memoria del Juego]] con un “Hito 03 — Pruebas y publicación”.
+- [ ] Actualizar [[Bienvenido|Memoria del Juego]] con un “Hito 04 — Pruebas y publicación” (el Hito 03 ya se usó para DE/AU).
 - [ ] `git add`, `git commit` y `git push` de los cambios.

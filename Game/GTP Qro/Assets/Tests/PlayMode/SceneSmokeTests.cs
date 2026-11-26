@@ -45,6 +45,7 @@ namespace GTP.Tests
             // El diálogo de inicio pone timeScale en 0: se espera en tiempo real y se cierra.
             yield return new WaitForSecondsRealtime(0.3f);
             GameManager gm = GameManager.Instance;
+            gm.Session.RestoreLevelStart(); // intentos completos aunque otra prueba haya usado algunos
             GameUI.Instance.Dialogue.Hide();
             gm.SetState(GameState.Exploracion);
 

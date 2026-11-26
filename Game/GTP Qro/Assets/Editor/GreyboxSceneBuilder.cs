@@ -17,7 +17,7 @@ namespace GTP.EditorTools
     /// ADVERTENCIA: sobrescribe Assets/_Scenes/Escena_*.unity. Si se editan escenas a mano,
     /// no volver a ejecutar o pasar esos cambios a este script.
     /// </summary>
-    public static class GreyboxSceneBuilder
+    public static partial class GreyboxSceneBuilder
     {
         private const string SceneDir = "Assets/_Scenes";
         private const string MatDir = "Assets/Materials/Greybox";
@@ -61,6 +61,7 @@ namespace GTP.EditorTools
             font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
             CreateMaterials();
             EnsureConfig();
+            PrepareHito03Assets();
 
             BuildMenu();
             BuildCuarto();
@@ -372,6 +373,7 @@ namespace GTP.EditorTools
             // Redada: el grupo se activa por evento al llegar al nuevo punto.
             var redada = new GameObject("Redada");
             GameObject gate = Box("Porton", 62.5f, 0f, 0.6f, 4f, 2.2f, "Puerta");
+            DynamicObstacle(gate); // al forzarlo se desactiva y el NavMesh se abre en tiempo real
             ObjectiveStep toGate = Objective("Objetivo_Porton", "Llega al portón del callejón y fuerza la cerradura", gate.transform, false);
             NarrativeSequence raid = Sequence("Redada_Inicio", false,
                 L("Orlando", "Aquí es. Espérame, voy a ver si..."),
@@ -483,6 +485,7 @@ namespace GTP.EditorTools
 
         private static void Save(string sceneName)
         {
+            FinishScene(sceneName);
             Scene scene = SceneManager.GetActiveScene();
             EditorSceneManager.SaveScene(scene, SceneDir + "/" + sceneName + ".unity");
         }
@@ -520,7 +523,7 @@ namespace GTP.EditorTools
             {
                 go.transform.position = target.position + CamOffset;
                 go.transform.rotation = CamRotation;
-                go.AddComponent<CameraFollow>().Configure(target, CamOffset);
+                AddCinemachineRig(cam, target);
             }
             else if (fixedPosition.HasValue)
             {
@@ -584,13 +587,12 @@ namespace GTP.EditorTools
             rb.interpolation = RigidbodyInterpolation.Interpolate;
             rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
 
-            var visual = new GameObject("Visual");
-            visual.transform.SetParent(root.transform, false);
-            GameObject body = Primitive(PrimitiveType.Capsule, "Cuerpo", visual.transform, Vector3.zero, new Vector3(0.9f, 1f, 0.9f), "Jugador");
+            Transform rig = AnimatedVisual(root.transform, out GameObject visual);
+            GameObject body = Primitive(PrimitiveType.Capsule, "Cuerpo", rig, Vector3.zero, new Vector3(0.9f, 1f, 0.9f), "Jugador");
             body.transform.localScale = new Vector3(0.9f, 1f, 0.9f);
-            Primitive(PrimitiveType.Cube, "Audifonos", visual.transform, new Vector3(0f, 0.85f, 0f), new Vector3(1.05f, 0.18f, 0.25f), "Negro");
+            Primitive(PrimitiveType.Cube, "Audifonos", rig, new Vector3(0f, 0.85f, 0f), new Vector3(1.05f, 0.18f, 0.25f), "Negro");
             var facing = new GameObject("Frente");
-            facing.transform.SetParent(visual.transform, false);
+            facing.transform.SetParent(rig, false);
             Primitive(PrimitiveType.Cube, "Nariz", facing.transform, new Vector3(0f, 0.45f, 0.42f), new Vector3(0.35f, 0.2f, 0.3f), "Blanco");
 
             var movement = root.AddComponent<PlayerMovement>();
@@ -613,8 +615,9 @@ namespace GTP.EditorTools
             rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation;
             rb.interpolation = RigidbodyInterpolation.Interpolate;
             rb.isKinematic = !companion;
-            Primitive(PrimitiveType.Capsule, "Cuerpo", root.transform, Vector3.zero, new Vector3(0.9f, 1f, 0.9f), mat);
-            Primitive(PrimitiveType.Cube, "Nariz", root.transform, new Vector3(0f, 0.45f, 0.42f), new Vector3(0.35f, 0.2f, 0.3f), "Blanco");
+            Transform rig = AnimatedVisual(root.transform, out _);
+            Primitive(PrimitiveType.Capsule, "Cuerpo", rig, Vector3.zero, new Vector3(0.9f, 1f, 0.9f), mat);
+            Primitive(PrimitiveType.Cube, "Nariz", rig, new Vector3(0f, 0.45f, 0.42f), new Vector3(0.35f, 0.2f, 0.3f), "Blanco");
             Label3D(name, new Vector3(0f, 1.6f, 0f), Color.white, 0.05f, root.transform);
             if (companion) root.AddComponent<CompanionFollower>();
             return root;
@@ -630,7 +633,7 @@ namespace GTP.EditorTools
 
             var points = new Vector3[route.Length];
             for (int i = 0; i < route.Length; i++) points[i] = route[i] + Vector3.up;
-            root.AddComponent<PatrolRoute>().Configure(points, speed, wait, pingPong);
+            root.AddComponent<PatrolRoute>().Configure(points, speed, wait, pingPong, true, navMesh: true);
 
             var coneGo = new GameObject("Cono_Vision");
             coneGo.transform.SetParent(root.transform, false);

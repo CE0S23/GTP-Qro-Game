@@ -29,6 +29,7 @@ namespace GTP
             {
                 gm.Session.RegisterGraffiti();
                 gm.Session.AddScore(gm.Config.graffitiPoints);
+                GameEvents.GraffitiRead.Raise(transform.position);
             }
 
             GameUI.Instance.Dialogue.Play(new[]

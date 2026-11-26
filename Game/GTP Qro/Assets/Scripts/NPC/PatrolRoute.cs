@@ -5,6 +5,8 @@ namespace GTP
     /// <summary>
     /// Patrulla por puntos de ruta (en bucle o ida y vuelta) con espera en cada punto.
     /// Se puede detener temporalmente con <see cref="Hold"/> (p. ej., cuando el policía ve al jugador).
+    /// Con <c>useNavMesh</c> camina entre puntos siguiendo el NavMesh y rodea obstáculos
+    /// (incluidos los NavMeshObstacle que se mueven o desaparecen durante el juego).
     /// </summary>
     public sealed class PatrolRoute : MonoBehaviour
     {
@@ -13,6 +15,9 @@ namespace GTP
         [SerializeField, Min(0f)] private float waitAtPoint = 1f;
         [SerializeField] private bool pingPong;
         [SerializeField] private bool rotateToMovement = true;
+        [SerializeField] private bool useNavMesh;
+
+        private readonly NavSteering nav = new NavSteering(0.5f);
 
         private Rigidbody body;
         private int index;
@@ -23,8 +28,10 @@ namespace GTP
 
         public bool Hold { get; set; }
 
-        public void Configure(Vector3[] points, float moveSpeed, float wait, bool usePingPong, bool rotate = true)
+        public void Configure(Vector3[] points, float moveSpeed, float wait, bool usePingPong, bool rotate = true,
+                              bool navMesh = false)
         {
+            useNavMesh = navMesh;
             waypoints = points;
             speed = moveSpeed;
             waitAtPoint = wait;
@@ -48,6 +55,7 @@ namespace GTP
             direction = 1;
             waitTimer = 0f;
             Hold = false;
+            nav.Invalidate();
             MoveTo(startPosition);
             transform.rotation = startRotation;
         }
@@ -66,6 +74,12 @@ namespace GTP
             target.y = transform.position.y;
             Vector3 position = transform.position;
             Vector3 next = Vector3.MoveTowards(position, target, speed * Time.fixedDeltaTime);
+            if (useNavMesh && (target - position).sqrMagnitude > 0.25f)
+            {
+                Vector3 dir = nav.DirectionTo(position, target);
+                if (dir != Vector3.zero)
+                    next = position + dir * Mathf.Min(speed * Time.fixedDeltaTime, (target - position).magnitude);
+            }
             Vector3 delta = next - position;
 
             if (rotateToMovement && delta.sqrMagnitude > 0.000001f)
@@ -77,6 +91,7 @@ namespace GTP
             {
                 waitTimer = waitAtPoint;
                 AdvanceIndex();
+                nav.Invalidate();
             }
         }
 

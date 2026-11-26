@@ -44,6 +44,7 @@ namespace GTP
         private IEnumerator GoodDawn()
         {
             GameManager.Instance.SetState(GameState.Final);
+            PostFXController.Current?.SetMood(PostFXController.Mood.CalidoAmanecer, 2f);
             yield return LerpLight(goodSunColor, 1.3f, 2f);
             Finish(Route.Bien);
         }
@@ -60,14 +61,19 @@ namespace GTP
 
         private void OnLighter(bool success)
         {
+            if (PlayerStealth.Current != null)
+                FeedbackFX.Instance?.PlayLighterFlame(PlayerStealth.Current.transform.position + Vector3.up * 0.6f);
             StartCoroutine(BadDawn());
         }
 
         private IEnumerator BadDawn()
         {
             GameManager.Instance.SetState(GameState.Final);
+            PostFXController.Current?.SetMood(PostFXController.Mood.Saturado, 1.5f);
             yield return LerpLight(badCalmColor, 1.6f, 1.5f);
             yield return new WaitForSecondsRealtime(1.5f);
+            PostFXController.Current?.SetMood(PostFXController.Mood.Desaturado, 2.5f);
+            FeedbackFX.Instance?.StopLighterFlame();
             yield return LerpLight(badDawnColor, 0.6f, 2.5f);
             bool done = false;
             GameUI.Instance.Dialogue.Play(new[]

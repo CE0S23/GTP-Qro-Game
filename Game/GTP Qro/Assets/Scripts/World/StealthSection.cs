@@ -27,6 +27,7 @@ namespace GTP
             {
                 gm.Session.RegisterPerfectStealth();
                 gm.Session.AddScore(gm.Config.stealthBonusPoints);
+                if (PlayerStealth.Current != null) GameEvents.StealthPerfect.Raise(PlayerStealth.Current.transform.position);
                 GameUI.Instance?.Hud.ShowToast("¡Sigilo perfecto! +" + gm.Config.stealthBonusPoints);
             }
         }

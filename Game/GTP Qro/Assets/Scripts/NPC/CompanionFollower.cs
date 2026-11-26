@@ -15,6 +15,7 @@ namespace GTP
         [SerializeField, Min(2f)] private float teleportDistance = 14f;
         [SerializeField] private Vector3 sideOffset = new Vector3(-1f, 0f, -1f);
 
+        private readonly NavSteering nav = new NavSteering(0.4f);
         private Rigidbody body;
         private bool following;
 
@@ -82,8 +83,11 @@ namespace GTP
             }
 
             float factor = Mathf.Clamp01((distance - followDistance * 0.5f) / followDistance);
-            body.linearVelocity = delta.normalized * speed * Mathf.Max(0.4f, factor);
-            transform.rotation = Quaternion.LookRotation(delta.normalized);
+            // Rodea obstáculos con el NavMesh (si existe); si no, línea recta.
+            Vector3 dir = nav.DirectionTo(transform.position, target);
+            if (dir == Vector3.zero) dir = delta.normalized;
+            body.linearVelocity = dir * speed * Mathf.Max(0.4f, factor);
+            transform.rotation = Quaternion.LookRotation(dir);
         }
     }
 }

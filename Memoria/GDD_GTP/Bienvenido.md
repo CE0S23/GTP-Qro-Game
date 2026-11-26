@@ -7,7 +7,7 @@ desarrolladores:
   - Mauricio Gabriel Vazquez
 institucion: Universidad Tecnológica de Querétaro (UTEQ)
 materia: Creación de Videojuegos
-estado: "Beta jugable (Parte 1 terminada) — pendiente Parte 2: pruebas y entrega"
+estado: "Beta jugable + Hito 03 (DE/AU) terminados — pendiente Parte 2: pruebas y entrega"
 fecha: 2026-11-25
 motor: Unity 6000.4.0f1 / URP 17.4.0
 lenguaje: C#
@@ -16,10 +16,11 @@ tags: [GTP, memoria, unity, prototipo, clean-code]
 
 # Memoria del Juego
 
-> **Estado al 2026-11-25:** la Parte 1 (desarrollo del beta, César) está terminada y en el repositorio <https://github.com/CE0S23/GTP-Qro-Game>. La Parte 2 (pruebas, manual, empaque y publicación, Orlando) está pendiente.
+> **Estado al 2026-11-25:** la Parte 1 (desarrollo del beta, César) y el Hito 03 (Cinemachine, post-processing, NavMesh, ScriptableObjects, Profiler) están terminados y en el repositorio <https://github.com/CE0S23/GTP-Qro-Game>. La Parte 2 (pruebas, manual, empaque y publicación, Orlando) está pendiente.
 >
 > - Plan y rúbrica: [[Plan de desarrollo - Evaluacion II]]
-> - Qué se construyó: [[Hito 02 - Beta jugable]]
+> - Qué se construyó: [[Hito 02 - Beta jugable]] y [[Hito 03 - Game feel, IA y optimizacion]]
+> - Reporte del Profiler: [[Analisis de Optimizacion (AU 4.1)]]
 > - Qué falta y cómo hacerlo: [[Parte 2 - Orlando (pendientes)]]
 > - Versión de Unity obligatoria para ambos: **6000.4.0f1**.
 
@@ -106,13 +107,17 @@ Evidencia técnica local: `tmp/unity-validation/result.txt`, `unity-isolated.log
 
 Ver [[Hito 02 - Beta jugable]] (25 de noviembre de 2026). Recorrido completo Menú → Cuarto → Barrio → Encrucijada → Ruta del Bien o del Mal → Spot, con puntaje, intentos, batería, sigilo, decisión, minijuegos y dos finales.
 
+## Hito 03 — Game feel, IA y optimización
+
+Ver [[Hito 03 - Game feel, IA y optimizacion]] (25 de noviembre de 2026). Cinemachine con transición y sacudida, post-processing y partículas, Blend Tree de locomoción, canales de eventos ScriptableObject, NavMesh para perseguidores y patrullas, y [[Analisis de Optimizacion (AU 4.1)]].
+
 ## Próximos hitos (pendientes)
 
 Los pendientes del Hito 01 (cono de visión, componente del celular, decisión narrativa) se cumplieron en el Hito 02. Lo que sigue está en [[Parte 2 - Orlando (pendientes)]]:
 
 - Pruebas manuales, duración real ≥ 5 min y reporte de pruebas (≥ 5 errores por severidad).
 - Manual de usuario, diseño de empaque y publicación en itch.io.
-- Opcional: Cinemachine, post-processing, NavMesh y Profiler (niveles DE/AU).
+- ~~Opcional: Cinemachine, post-processing, NavMesh y Profiler (niveles DE/AU).~~ Hecho en el Hito 03.
 
 ## Referencia técnica
 
